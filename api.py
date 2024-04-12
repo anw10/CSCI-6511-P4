@@ -8,27 +8,30 @@ import keys
 #####   - e.g. teamid != teamId     #####
 #########################################
 
-def enter_world(world_id):
-
-    payload = {"type": "enter", "worldId": world_id, "teamId": keys.TEAM_ID}
-    params = {}
-    headers = {
-        "x-api-key": keys.API_KEY,
-        "userId": keys.USER_ID,
-        "Content-Type": "application/x-www-form-urlencoded",
-        "User-Agent": "PostmanRuntime/7.37.0",
-    }
-
-    response = requests.post(
-        keys.WORLD_URL,
-        headers=headers,
-        data=payload,
-    )
-    print(response.text)
+def get_runs():
+    """
+    Request Type: GET
+    
+    Parameters: type=runs, teamId=$teamId, count=$count
+    Return Values: Your previous $count runs with score.
+    """
+    #TODO
+    pass
 
 
-def locate_me():
-
+def locate_me():  # Get Location
+    """
+    Request Type: GET
+    
+    Parameters: type=location, teamId=$teamId
+    Return Values: your current world and state in that world.
+    Think of this as your GPS, and confirm where you are.
+    If you are in world “-1”, that means you are in no world, and you can enter a world.
+    
+    ***** This call is entirely optional and is useful only for debugging purposes.
+    ***** Your program does not need to make this call.
+    """
+    
     payload = {}
     params = {"type": "location", "teamId": keys.TEAM_ID}
     headers = {
@@ -38,13 +41,64 @@ def locate_me():
         "User-Agent": "PostmanRuntime/7.37.0",
     }
 
-    response = requests.get(
-        keys.WORLD_URL, headers=headers, data=payload, params=params
-    )
-    print(response.text)
+    response = requests.get(keys.WORLD_URL, headers=headers, data=payload, params=params)
+    #TODO
     
 
-def get_score(team_id):
+def enter_world(world_id):
+    """
+    Request Type: GET
+    
+    Parameters: type=location, worldId=$worldId, teamId=$teamId
+    Return Values: your current world and state in that world.
+    Think of this as your GPS, and confirm where you are.
+    If you are in world “-1”, that means you are in no world, and you can enter a world.
+    
+    ***** This call is entirely optional and is useful only for debugging purposes.
+    ***** Your program does not need to make this call.
+    """
+    
+    payload = {"type": "enter", "worldId": world_id, "teamId": keys.TEAM_ID}
+    params = {}
+    headers = {
+        "x-api-key": keys.API_KEY,
+        "userId": keys.USER_ID,
+        "Content-Type": "application/x-www-form-urlencoded",
+        "User-Agent": "PostmanRuntime/7.37.0",
+    }
+
+    response = requests.get(keys.WORLD_URL, headers=headers, data=payload, params=params)
+    #TODO
+    
+
+def make_move(move, world_id):
+    """
+    Request Type: POST
+    
+    Body: type="move", teamId=$teamId, move="$move", worldId=$worldId
+    Return Values: Reward, New State entered $runId started
+    
+    Fails if you are not already in a world (in that case, enter a world first).
+    
+    ***** This is the central part of your "learning" agent.
+    ***** Your program needs to carefully process the result.
+    ***** Introduce a delay and do not make more than one move call every 15 seconds..
+    """
+    
+    payload = {"type": "move", "teamId": keys.TEAM_ID, "move": move, "worldId": world_id}
+    params = {}
+    headers = {
+        "x-api-key": keys.API_KEY,
+        "userId": keys.USER_ID,
+        "Content-Type": "application/x-www-form-urlencoded",
+        "User-Agent": "PostmanRuntime/7.37.0",
+    }
+
+    response = requests.get(keys.WORLD_URL, headers=headers, data=payload, params=params)
+    #TODO
+
+
+def get_score():
     """
     Request Type: GET
 
@@ -56,7 +110,7 @@ def get_score(team_id):
     """
 
     payload = {}
-    params = {"type": "score", "teamId": team_id}
+    params = {"type": "score", "teamId": keys.TEAM_ID}
     headers = {
         "x-api-key": keys.API_KEY,
         "userId": keys.USER_ID,
@@ -86,7 +140,8 @@ def get_score(team_id):
 #####         Testing Calls         #####
 #########################################
 
-# enter_world(0)
+# get_runs()
 # locate_me()
-
-get_score(team_id=1397)
+# enter_world(world_id=0)
+# make_move(move="N", world_id="0")
+# get_score()
