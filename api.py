@@ -2,21 +2,32 @@ import requests
 import json
 import keys
 
+
 #########################################
 #####              API              #####
 #####   - API is case sensitive.    #####
 #####   - e.g. teamid != teamId     #####
 #########################################
 
-def get_runs():
+def get_runs(count):  # Get my team's last x runs
     """
     Request Type: GET
     
     Parameters: type=runs, teamId=$teamId, count=$count
     Return Values: Your previous $count runs with score.
     """
+    
+    payload = {}
+    params = {"type": "runs", "teamId": keys.TEAM_ID, "count": count}
+    headers = {
+        "x-api-key": keys.API_KEY,
+        "userId": keys.USER_ID,
+        "Content-Type": "application/x-www-form-urlencoded",
+        "User-Agent": "PostmanRuntime/7.37.0",
+    }
+
+    response = requests.get(keys.SCORE_URL, headers=headers, data=payload, params=params)
     #TODO
-    pass
 
 
 def locate_me():  # Get Location
@@ -94,8 +105,21 @@ def make_move(move, world_id):
         "User-Agent": "PostmanRuntime/7.37.0",
     }
 
-    response = requests.get(keys.WORLD_URL, headers=headers, data=payload, params=params)
-    #TODO
+    response = requests.post(keys.WORLD_URL, headers=headers, data=payload, params=params)
+    # print("DEBUG:", response.text)  # Example Result of Success: {"code":"OK","worldId":0,"runId":"14","reward":10000,"scoreIncrement":51.5399999999999991473487108787977695465087890625,"newState":null}
+                                      # Example Result of Fail: {"code":"FAIL","message":"No run is open for this team and world."}
+    
+    if len(response.text) != 0:  # There is some messages in the response
+        response_in_dict = json.loads(response.text)
+        # print("DEBUG:", response_in_dict)  # Example: {'code': 'OK', 'worldId': 0, 'runId': '14', 'reward': 10000, 'scoreIncrement': 51.5399999999999991473487108787977695465087890625, 'newState': null}
+        if response_in_dict["code"] == "OK":  # Success
+            return response_in_dict["reward"], response_in_dict["newState"], response_in_dict["runId"]
+        elif response_in_dict["code"] == "FAIL":  # Fail
+            print(response_in_dict["message"])  # Example: Cannot make move - It is not the turn of team: 1397
+        else:
+            print("*** ERROR ***")
+    else:  # Another type of Fail
+        print("*** ERROR ***")
 
 
 def get_score():
@@ -140,8 +164,8 @@ def get_score():
 #####         Testing Calls         #####
 #########################################
 
-# get_runs()
+# get_runs(count=10)
 # locate_me()
 # enter_world(world_id=0)
-# make_move(move="N", world_id="0")
+make_move(move="N", world_id="0")
 # get_score()
