@@ -9,6 +9,45 @@ import keys
 #####   - e.g. teamid != teamId     #####
 #########################################
 
+def get_my_team():
+    url = 'https://www.notexponential.com/aip2pgaming/api/index.php'
+    params = {"type": "myTeams", "teamId": keys.TEAM_ID}
+    payload = {}
+    headers = {
+        "x-api-key": keys.API_KEY,
+        "userId": keys.USER_ID,
+        "Content-Type": "application/x-www-form-urlencoded",
+        "User-Agent": "PostmanRuntime/7.37.0",
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload, params=params)
+    response_in_dict = json.loads(response.text)
+
+    print("DEBUG: ", response_in_dict)
+
+    # TODO
+
+
+
+def reset_my_team():
+    url = 'https://www.notexponential.com/aip2pgaming/api/rl/reset.php'
+
+    payload = {}
+    params = {"type": "myTeams", "teamId": keys.TEAM_ID, "otp": "5712768807" }
+    headers = {
+        "x-api-key": keys.API_KEY,
+        "userId": keys.USER_ID,
+        "Content-Type": "application/x-www-form-urlencoded",
+        "User-Agent": "PostmanRuntime/7.37.0",
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload, params= params)
+    response_in_dict = json.loads(response.text)
+
+    print("DEBUG: ", response_in_dict)
+
+    # TODO
+
 def get_runs(count):  # Get my team's last x runs
     """
     Request Type: GET
@@ -27,8 +66,10 @@ def get_runs(count):  # Get my team's last x runs
     }
 
     response = requests.get(keys.SCORE_URL, headers=headers, data=payload, params=params)
-    #TODO
+    response_in_dict = json.loads(response.text)
+    print("DEBUG: ", response_in_dict)
 
+    #TODO
 
 def locate_me():  # Get Location
     """
@@ -53,22 +94,24 @@ def locate_me():  # Get Location
     }
 
     response = requests.get(keys.WORLD_URL, headers=headers, data=payload, params=params)
+    response_in_dict = json.loads(response.text)
+    print("DEBUG: ", response_in_dict)
+
     #TODO
-    
 
 def enter_world(world_id):
     """
-    Request Type: GET
-    
+    Request Type: POST
+
     Parameters: type=location, worldId=$worldId, teamId=$teamId
     Return Values: your current world and state in that world.
     Think of this as your GPS, and confirm where you are.
     If you are in world “-1”, that means you are in no world, and you can enter a world.
-    
+
     ***** This call is entirely optional and is useful only for debugging purposes.
     ***** Your program does not need to make this call.
     """
-    
+
     payload = {"type": "enter", "worldId": world_id, "teamId": keys.TEAM_ID}
     params = {}
     headers = {
@@ -78,9 +121,12 @@ def enter_world(world_id):
         "User-Agent": "PostmanRuntime/7.37.0",
     }
 
-    response = requests.get(keys.WORLD_URL, headers=headers, data=payload, params=params)
-    #TODO
-    
+    response = requests.post(keys.WORLD_URL, headers=headers, data=payload, params=params)
+    response_in_dict = json.loads(response.text)
+    print("DEBUG:", response)
+
+    # TODO
+
 
 def make_move(move, world_id):
     """
@@ -164,8 +210,11 @@ def get_score():
 #####         Testing Calls         #####
 #########################################
 
+# get_my_team()
+# reset_my_team()
 # get_runs(count=10)
+enter_world(world_id='2')
 # locate_me()
-# enter_world(world_id=0)
-make_move(move="N", world_id="0")
+
+# make_move(move="S", world_id="0")
 # get_score()
