@@ -13,6 +13,12 @@ def load_json(filename):
     return data
 
 
+def write_persist(filename, data):
+
+    with open(filename, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
+
+
 def alpha(visits):
     """Adaptive learning rate based on number of visits"""
 
@@ -74,7 +80,7 @@ def q_learning_agent(
 
     # Decide next action using exploration function f
     next_action = f(Q["0"][curr_state], N["0"][curr_state])
-    return next_action
+    return next_action, Q, N
 
 
 load_json("N.json")
