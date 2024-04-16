@@ -1,45 +1,42 @@
 import numpy as np
 import json
-# from dataclasses import dataclass, field
-
-# @dataclass
-# class Percept:
-#     current_state: tuple[int, int]
-#     reward: int
 
 
 ## Q-values I guess
 def q_values():
     return True
 
-## Utils
 
 def load_json(filename):
-    with open(filename, 'r') as file:
+    with open(filename, "r") as file:
         data = json.load(file)
     return data
 
 
 def alpha(visits):
-    """ Adaptive learning rate based on number of visits """
+    """Adaptive learning rate based on number of visits"""
 
     return 1 / (1 + visits)
 
 
 def epsilon_greedy(actions, _, epsilon=0.1):
-    """ Epsilon-greedy exploration strategy. """
+    """Epsilon-greedy exploration strategy."""
     if np.random.rand() < epsilon:  # With probability epsilon, explore.
         return np.random.choice(list(actions.keys()))
     else:  # With probability 1-epsilon, exploit.
         return max(actions, key=actions.get)
 
+
 def count_based(actions, visits):
-    """ Count/Density-based exploration strategy. """
+    """Count/Density-based exploration strategy."""
 
     raise NotImplementedError
 
+
 ## Q-Learning-Agent
-def q_learning_agent(prev_state, prev_action, curr_state, reward, Q, N, discount, f=epsilon_greedy):
+def q_learning_agent(
+    prev_state, prev_action, curr_state, reward, Q, N, discount, f=epsilon_greedy
+):
     """
     Q-Learning Agent that uses an exploration function f.
 
@@ -59,15 +56,25 @@ def q_learning_agent(prev_state, prev_action, curr_state, reward, Q, N, discount
         N: The N visits table, where N[state][action] counts the visits to the state-action pair.
         discount: The discount factor (gamma).
         f: The exploration function
-        
+
     Returns:
         next_action: The next action to take.
     """
 
     if prev_state is not None:
-        N[prev_state][prev_action] += 1
-        Q[prev_state][prev_action] = Q[prev_state][prev_action] + alpha(N[prev_state][prev_action]) * (reward + discount * max(Q[curr_state].values()) - Q[prev_state][prev_action])
+        # N[worldId][[x,y]]["DIRECTION"] += 1
+        N["0"][prev_state][prev_action] += 1
+        Q["0"][prev_state][prev_action] = Q["0"][prev_state][prev_action] + alpha(
+            N[prev_state][prev_action]
+        ) * (
+            reward
+            + discount * max(Q["0"][curr_state].values())
+            - Q["0"][prev_state][prev_action]
+        )
 
     # Decide next action using exploration function f
-    next_action = f(Q[curr_state], N[curr_state])
+    next_action = f(Q["0"][curr_state], N["0"][curr_state])
     return next_action
+
+
+load_json("N.json")
