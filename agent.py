@@ -1,5 +1,8 @@
 import numpy as np
 import json
+import matplotlib.pyplot as plt
+import re
+import seaborn as sns
 
 
 ## Q-values I guess
@@ -10,13 +13,35 @@ def q_values():
 def load_json(filename):
     with open(filename, "r") as file:
         data = json.load(file)
+    # print_grid("test.txt", data, "0")
     return data
 
 
 def write_persist(filename, data):
-
     with open(filename, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
+
+
+def print_grid(filename, data, world_id):
+
+    grid = np.zeros((40, 40))
+
+    for i in data[world_id]:
+
+        avg_val = 0
+
+        for direction in data[world_id][i]:
+            avg_val += data[world_id][i][direction]
+
+        pattern = re.compile(r"[\[\]]", re.IGNORECASE)
+        new_i = re.sub(pattern, "", i).split(",")
+        x, y = tuple(new_i)
+        grid[int(x)][int(y)] = avg_val
+        # np.savetxt(filename, grid)
+        plt.imshow(grid)
+        # plt.plot(grid)
+
+    plt.show()
 
 
 def alpha(visits):
@@ -83,4 +108,4 @@ def q_learning_agent(
     return next_action, Q, N
 
 
-load_json("N.json")
+# load_json("N.json")
