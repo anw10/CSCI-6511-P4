@@ -66,7 +66,7 @@ def count_based(actions, visits):
 
 ## Q-Learning-Agent
 def q_learning_agent(
-    prev_state, prev_action, curr_state, reward, Q, N, discount, f=epsilon_greedy
+    prev_state, prev_action, curr_state, reward, Q, N, discount, world, f=epsilon_greedy
 ):
     """
     Q-Learning Agent that uses an exploration function f.
@@ -94,18 +94,15 @@ def q_learning_agent(
 
     if prev_state is not None:
         # N[worldId][[x,y]]["DIRECTION"] += 1
-        N["0"][prev_state][prev_action] += 1
-        Q["0"][prev_state][prev_action] = Q["0"][prev_state][prev_action] + alpha(
-            N[prev_state][prev_action]
+        N[world][prev_state][prev_action] += 1
+        Q[world][prev_state][prev_action] = Q[world][prev_state][prev_action] + alpha(
+            N[world][prev_state][prev_action]
         ) * (
             reward
-            + discount * max(Q["0"][curr_state].values())
-            - Q["0"][prev_state][prev_action]
+            + discount * max(Q[world][curr_state].values())
+            - Q[world][prev_state][prev_action]
         )
 
     # Decide next action using exploration function f
-    next_action = f(Q["0"][curr_state], N["0"][curr_state])
+    next_action = f(Q[world][curr_state], N[world][curr_state])
     return next_action, Q, N
-
-
-# load_json("N.json")

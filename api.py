@@ -26,9 +26,7 @@ def get_my_team():
     )
     response_in_dict = json.loads(response.text)
 
-    print("DEBUG: ", response_in_dict)
-
-    # TODO
+    print("My Team is: ", response_in_dict)
 
 
 def reset_my_team():
@@ -47,10 +45,15 @@ def reset_my_team():
         "GET", url, headers=headers, data=payload, params=params
     )
     response_in_dict = json.loads(response.text)
+    # print("DEBUG: ", response_in_dict)
 
-    print("DEBUG: ", response_in_dict)
-
-    # TODO
+    if response_in_dict["code"] == "OK":
+        print("Successfully Resetted")
+    elif response_in_dict["code"] == "FAIL":
+        fail_message = response_in_dict["message"]
+        print(fail_message)
+    else:
+        print("*** ERROR ***")
 
 
 def get_runs(count):  # Get my team's last x runs
@@ -133,10 +136,15 @@ def enter_world(world_id):
     }
 
     response = requests.post(keys.WORLD_URL, headers=headers, data=payload)
-    # response_in_dict = json.loads(response)
-    print(response)
-    print("DEBUG:", response.text)
-    # print(response_in_dict)
+    response_in_dict = json.loads(response.text)
+
+    # "[0,0]"
+    # move_t = tuple(...) == ('0', '0')
+    # move = f"[{move_t[0]},{move_t[1]}]""
+
+    print(response_in_dict)
+    # print("DEBUG:", response.text)
+    return response_in_dict
     # TODO
 
 
@@ -178,15 +186,13 @@ def make_move(move, world_id):
         response_in_dict = json.loads(response.text)
         # print("DEBUG:", response_in_dict)  # Example: {'code': 'OK', 'worldId': 0, 'runId': '14', 'reward': 10000, 'scoreIncrement': 51.5399999999999991473487108787977695465087890625, 'newState': null}
         if response_in_dict["code"] == "OK":  # Success
+            print(response_in_dict)
             return (
                 response_in_dict["reward"],
                 response_in_dict["newState"],
-                response_in_dict["runId"],
             )
         elif response_in_dict["code"] == "FAIL":  # Fail
-            print(
-                response_in_dict["message"]
-            )  # Example: Cannot make move - It is not the turn of team: 1397
+            print(response_in_dict["message"])
         else:
             print("*** ERROR ***")
     else:  # Another type of Fail
@@ -241,8 +247,11 @@ def get_score():
 # get_my_team()
 # reset_my_team()
 # get_runs(count=10)
-# enter_world("0")
+# enter_world(0)
 # locate_me()
 
-make_move(move="S", world_id="0")
+# print(make_move(move="S", world_id="0"))
+# reward, current_pos = make_move(move="N", world_id="0")
+# print(f"Reward: {reward}")
+# print(f"Current pos: {current_pos}")
 # get_score()
