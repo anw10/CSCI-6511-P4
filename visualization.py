@@ -3,12 +3,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import json
 import re
+import time
 
 
 def load_json(filename):
     with open(filename, "r") as file:
         data = json.load(file)
-    print_grid("test.txt", data, "0")
+    # print_grid("test.txt", data, "0")
     return data
 
 
@@ -31,7 +32,8 @@ def print_grid(filename, data, world_id):
         plt.imshow(grid)
         # plt.plot(grid)
 
-    plt.show()
+    # plt.show()
+    plt.savefig(str(world_id) + "/" + str(time.time_ns()) + ".png")
 
 
-load_json("Q.json")
+# load_json("Q.json")
