@@ -108,9 +108,8 @@ def locate_me():  # Get Location
         url=keys.WORLD_URL, headers=headers, data=payload, params=params
     )
     response_in_dict = json.loads(response.text)
-    print("DEBUG: ", response_in_dict)
-
-    # TODO
+    # print("DEBUG: ", response_in_dict)
+    return response_in_dict
 
 
 def enter_world(world_id):

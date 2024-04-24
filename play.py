@@ -5,7 +5,7 @@ import time
 
 def format_coord_enter_world(current_pos):
 
-    if current_pos == "Null":
+    if current_pos == None:
         coord_formated = False
     else:
         coord = tuple(current_pos.replace(":", ""))
@@ -16,7 +16,7 @@ def format_coord_enter_world(current_pos):
 
 def format_coord_make_move(current_pos):
 
-    if current_pos == "":
+    if current_pos == None:
         coord_formated = False
     else:
         coord = current_pos
@@ -37,7 +37,10 @@ def full_algo(world=str(0), epoch=1):
     for i in range(0, epoch):
 
         # Each epoch, enter the world
-        current_pos = api.enter_world(world)["state"]
+        if api.enter_world(world)["code"] == "FAIL":
+            current_pos = api.locate_me()["state"]
+        else:
+            current_pos = api.enter_world(world)["state"]
         # current_pos = "0:0"  ##
 
         coord_formated = format_coord_enter_world(current_pos)
