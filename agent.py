@@ -76,21 +76,29 @@ def epsilon_greedy(actions, _, epsilon=0.1):
         return max(actions, key=actions.get)
 
 
-def count_based(actions, visits, k=1, multiplier_at_zero_visits=0.1):
+def count_based(actions, visits, k=1, N_e=10, multiplier_at_zero_visits=0.1):
     """
-    Count/Density-based exploration strategy to explore areas where badness is not yet established, f(u, n) = u + k/n
+    Count/Density-based exploration strategy to explore areas where badness is not yet established, 
+    
+    R+ = u + k/visits
+    f(u, n) = {R+ if n < N_e, else u}
 
     Args:
         actions (dict): The actions available for the current state
         visits (dict): The visits for the current state
         k (int): Exploration reward hyperparameter
+        N_e (int): Cap for state-action tries hyperparameter, i.e., the agent should try the state-action pair at least N_e times. 
         multiplier_at_zero_visits (float): Reward multiplier when a direction has not been visited from the current state
     
     Returns:
-        best_action (str): Action with optimistic utility
+        next_action (str): Action with optimistic utility or exploited utility
     """
 
-    next_action = max(actions, key=lambda a: actions[a] + k / (visits[a] if visits[a] > 0 else multiplier_at_zero_visits))
+    if visits < N_e:
+        next_action = max(actions, key=lambda a: actions[a] + k / (visits[a] if visits[a] > 0 else multiplier_at_zero_visits))
+    else:
+        next_action = max(actions, key=actions.get)
+
     return next_action
 
 
