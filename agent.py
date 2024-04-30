@@ -45,14 +45,32 @@ def print_grid(filename, data, world_id):
 
 
 def alpha(visits):
-    """Adaptive learning rate based on number of visits"""
+    """
+    Adaptive learning rate based on number of visits. Higher visits
+
+    Args:
+        visits (int): The count of visits of the direction taken from the previous state
+
+    Returns:
+        (float): Learning rate based on visits
+    """
 
     return 1 / (1 + visits)
     # return 0.21
 
 
-def epsilon_greedy(actions, _, epsilon=0.35):
-    """Epsilon-greedy exploration strategy."""
+def epsilon_greedy(actions, _, epsilon=0.1):
+    """
+    Epsilon-greedy exploration strategy.
+
+    Args:
+        actions (dict): The actions available for the current state
+        epsilon (int): Random exploration hyperparameter
+
+    Returns:
+        (str): Next action, whether it's exploring or exploiting
+    """
+
     if np.random.rand() < epsilon:  # With probability epsilon, explore.
         return np.random.choice(list(actions.keys()))
     else:  # With probability 1-epsilon, exploit.
@@ -109,17 +127,18 @@ def q_learning_agent(
     return a
 
     Args:
-        prev_state: The previous state.
-        prev_action: The action taken at the previous state.
-        curr_state: The current state.
-        reward: The reward signal at current state.
-        Q: The Q-values table, where Q[state][action] is the Q-value for the state-action pair.
-        N: The N visits table, where N[state][action] counts the visits to the state-action pair.
-        discount: The discount factor (gamma).
+        prev_state (str): The previous state.
+        prev_action (str): The action taken at the previous state.
+        curr_state (str): The current state.
+        reward (float): The reward signal at current state.
+        Q (dict): The Q-values table, where Q[state][action] is the Q-value for the state-action pair.
+        N (dict): The N visits table, where N[state][action] counts the visits to the state-action pair.
+        discount (float): The discount factor (gamma).
+        world (str): Current world
         f: The exploration function
 
     Returns:
-        next_action: The next action to take.
+        next_action (str): The next action to take.
     """
 
     if prev_state is not None:
