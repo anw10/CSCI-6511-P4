@@ -246,7 +246,7 @@ def get_score():
 # get_my_team()
 # reset_my_team()
 # get_runs(count=10)
-# enter_world(4)
+# enter_world(5)
 # locate_me()
 
 # print(make_move(move="S", world_id="0"))

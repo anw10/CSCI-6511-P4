@@ -63,6 +63,7 @@ def full_algo(world=str(0), epoch=20, gamma=0.9999):
         # current_pos = "0:0"  ##
 
         coord_formated = format_coord_enter_world(current_pos)
+        print(coord_formated, "Formatted COORD")
 
         prev_state = None
         prev_action = None
@@ -78,7 +79,7 @@ def full_algo(world=str(0), epoch=20, gamma=0.9999):
             prev_state = coord_formated
             prev_action = next_action
 
-            print(next_action)
+            print(next_action, "Next Action")
             reward, current_pos = api.make_move(
                 next_action, world
             )  ## Returns reward and new_state
@@ -102,6 +103,8 @@ def full_algo(world=str(0), epoch=20, gamma=0.9999):
                     world,
                 )
 
+                # also we should do N[prev_prev_state][prev_prev_action] -= 1 because it does the "same" move twice
+
                 if reward < 0:
                     neg_t_coords[world].append(prev_state)
                 else:
@@ -117,4 +120,4 @@ def full_algo(world=str(0), epoch=20, gamma=0.9999):
 
 if __name__ == "__main__":
     # Run game
-    full_algo(world=4, epoch=20)
+    full_algo(world=5, epoch=20)

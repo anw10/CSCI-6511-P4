@@ -48,9 +48,10 @@ def alpha(visits):
     """Adaptive learning rate based on number of visits"""
 
     return 1 / (1 + visits)
+    # return 0.21
 
 
-def epsilon_greedy(actions, _, epsilon=0.70):
+def epsilon_greedy(actions, _, epsilon=0.35):
     """Epsilon-greedy exploration strategy."""
     if np.random.rand() < epsilon:  # With probability epsilon, explore.
         return np.random.choice(list(actions.keys()))
@@ -58,15 +59,44 @@ def epsilon_greedy(actions, _, epsilon=0.70):
         return max(actions, key=actions.get)
 
 
-def count_based(actions, visits):
-    """Count/Density-based exploration strategy."""
+def count_based(actions, visits, k=1, N_e=10, multiplier_at_zero_visits=0.1):
+    """
+    Count/Density-based exploration strategy to explore areas where badness is not yet established,
 
-    raise NotImplementedError
+    R+ = u + k/visits
+    f(u, n) = {R+ if n < N_e, else u}
+
+    Args:
+        actions (dict): The actions available for the current state
+        visits (dict): The visits for the current state
+        k (int): Exploration reward hyperparameter
+        N_e (int): Cap for state-action tries hyperparameter, i.e., the agent should try the state-action pair at least N_e times.
+        multiplier_at_zero_visits (float): Reward multiplier when a direction has not been visited from the current state
+
+    Returns:
+        next_action (str): Action with optimistic utility or exploited utility
+    """
+
+    def explore_optimisic_or_not(action):
+        """R+ if n < N_e, else u"""
+
+        visit_count = (
+            visits[action] if visits[action] > 0 else multiplier_at_zero_visits
+        )
+
+        if visits[action] < N_e:
+            return actions[action] + k / visit_count
+        else:
+            return actions[action]
+
+    next_action = max(actions, key=explore_optimisic_or_not)
+
+    return next_action
 
 
 ## Q-Learning-Agent
 def q_learning_agent(
-    prev_state, prev_action, curr_state, reward, Q, N, discount, world, f=epsilon_greedy
+    prev_state, prev_action, curr_state, reward, Q, N, discount, world, f=count_based
 ):
     """
     Q-Learning Agent that uses an exploration function f.
