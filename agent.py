@@ -50,7 +50,7 @@ def alpha(visits):
     return 1 / (1 + visits)
 
 
-def epsilon_greedy(actions, _, epsilon=0.1):
+def epsilon_greedy(actions, _, epsilon=0.70):
     """Epsilon-greedy exploration strategy."""
     if np.random.rand() < epsilon:  # With probability epsilon, explore.
         return np.random.choice(list(actions.keys()))

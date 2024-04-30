@@ -185,7 +185,7 @@ def make_move(move, world_id):
         response_in_dict = json.loads(response.text)
         # print("DEBUG:", response_in_dict)  # Example: {'code': 'OK', 'worldId': 0, 'runId': '14', 'reward': 10000, 'scoreIncrement': 51.5399999999999991473487108787977695465087890625, 'newState': null}
         if response_in_dict["code"] == "OK":  # Success
-            print(response_in_dict)
+            print(response_in_dict, "MM")
             return (
                 response_in_dict["reward"],
                 response_in_dict["newState"],
@@ -246,7 +246,7 @@ def get_score():
 # get_my_team()
 # reset_my_team()
 # get_runs(count=10)
-# enter_world(0)
+# enter_world(4)
 # locate_me()
 
 # print(make_move(move="S", world_id="0"))
