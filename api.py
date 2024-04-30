@@ -76,10 +76,25 @@ def get_runs(count):  # Get my team's last x runs
     response = requests.get(
         keys.SCORE_URL, headers=headers, data=payload, params=params
     )
-    response_in_dict = json.loads(response.text)
-    print("DEBUG: ", response_in_dict)
+    response_in_dict = json.loads(response.text)  # Example: {'runs': [{'runId': '59399', 'teamId': '1397', 'gworldId': '4', 'createTs': '2024-04-29 19:14:39', 'score': '0.72320109', 'moves': '234'}], 'code': 'OK'}
+    # print("DEBUG: ", response_in_dict)
 
-    # TODO
+    if response_in_dict["code"] == "OK":
+        scores = []
+        if count > len(response_in_dict["runs"]):
+            count = len(response_in_dict["runs"])
+        for num_most_recent_runs in range(count):
+            score = response_in_dict["runs"][num_most_recent_runs]["score"]
+            scores.append(float(score))
+        # print("DEBUG:", scores)
+        return scores  # Example: [0.72320109, -727.1800897, -10.00317689]
+    elif (
+        response_in_dict["code"] == "FAIL"
+    ):
+        fail_message = response_in_dict["message"]
+        print(fail_message)
+    else:
+        print("*** ERROR ***")
 
 
 def locate_me():  # Get Location
@@ -245,7 +260,7 @@ def get_score():
 
 # get_my_team()
 # reset_my_team()
-# get_runs(count=10)
+# get_runs(count=3)
 # enter_world(0)
 # locate_me()
 
@@ -254,3 +269,6 @@ def get_score():
 # print(f"Reward: {reward}")
 # print(f"Current pos: {current_pos}")
 # get_score()
+
+# total_score = sum(get_runs(count=500))
+# print(f"total score: {total_score}")
