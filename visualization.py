@@ -4,7 +4,7 @@ import numpy as np
 import json
 import re
 import time
-
+import os
 
 def load_json(filename):
     with open(filename, "r") as file:
@@ -38,8 +38,17 @@ def print_grid(filename, data, world_id):
         )
         # plt.plot(grid)
 
+    # Check if directory exists, create if it doesn't
+    directory = str(world_id)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
     # plt.show()
     plt.savefig(str(world_id) + "/" + str(time.time_ns()) + ".png")
 
 
 # load_json("Q.json")
+
+if __name__ == "__main__":
+    q_save = load_json("Q.json")
+    print_grid("test", q_save, world_id="5")

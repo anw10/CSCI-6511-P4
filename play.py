@@ -115,9 +115,14 @@ def full_algo(world=str(0), epoch=20, gamma=0.9999):
             agent.write_persist("posT.json", pos_t_coords)
             agent.write_persist("negT.json", neg_t_coords)
 
-            time.sleep(5)
+            time.sleep(4)
 
 
 if __name__ == "__main__":
     # Run game
-    full_algo(world=5, epoch=20)
+    while True:
+        try:
+            full_algo(world=5, epoch=20)
+        except Exception as e:
+            print(e)
+            print("it's okay, run it back")
