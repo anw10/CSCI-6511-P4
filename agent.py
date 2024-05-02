@@ -77,7 +77,7 @@ def epsilon_greedy(actions, _, epsilon=0.1):
         return max(actions, key=actions.get)
 
 
-def count_based(actions, visits, k=1, N_e=4, multiplier_at_zero_visits=0.1):
+def count_based(actions, visits, k=10, N_e=3, multiplier_at_zero_visits=0.5):
     """
     Count/Density-based exploration strategy to explore areas where badness is not yet established,
 

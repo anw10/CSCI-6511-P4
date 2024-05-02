@@ -245,10 +245,10 @@ def get_score():
 
 if __name__ == "__main__":
     # get_my_team()
-    reset_my_team()
+    # reset_my_team()
     # get_runs(count=10)
     # enter_world(5)
-    print(locate_me())
+    # print(locate_me())
 
     # print(make_move(move="S", world_id="0"))
     # reward, current_pos = make_move(move="N", world_id="0")
