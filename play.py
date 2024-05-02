@@ -3,30 +3,7 @@ import agent
 import time
 import visualization
 import os
-import signal
-import sys
 
-##################################################
-##### Safe Exit with CTRL+C
-##################################################
-
-# Global vars
-global Q, N, pos_t_coords, neg_t_coords
-
-def signal_handler(sig, frame):
-    print('You pressed Ctrl+C! Safely exiting...')
-    agent.write_persist("Q.json", Q)
-    agent.write_persist("N.json", N)
-    agent.write_persist("posT.json", pos_t_coords)
-    agent.write_persist("negT.json", neg_t_coords)
-    sys.exit(0)
-
-# Setup the signal handler
-signal.signal(signal.SIGINT, signal_handler)
-
-##################################################
-##### Learning
-##################################################
 
 def format_coord_enter_world(current_pos):
 
@@ -53,7 +30,6 @@ def format_coord_make_move(current_pos):
 
 
 def full_algo(world=str(0), epoch=20, gamma=0.9999):
-    global Q, N, pos_t_coords, neg_t_coords
 
     world = str(world)
 
