@@ -59,7 +59,7 @@ def alpha(visits):
     # return 0.21
 
 
-def epsilon_greedy(actions, _, epsilon=0.1):
+def epsilon_greedy(actions, _, epsilon=0.4):
     """
     Epsilon-greedy exploration strategy.
 
@@ -77,7 +77,7 @@ def epsilon_greedy(actions, _, epsilon=0.1):
         return max(actions, key=actions.get)
 
 
-def count_based(actions, visits, k=10, N_e=3, multiplier_at_zero_visits=0.5):
+def count_based(actions, visits, k=1, N_e=3, multiplier_at_zero_visits=0.1):
     """
     Count/Density-based exploration strategy to explore areas where badness is not yet established,
 
@@ -110,7 +110,6 @@ def count_based(actions, visits, k=10, N_e=3, multiplier_at_zero_visits=0.5):
     next_action = max(actions, key=explore_optimisic_or_not)
 
     return next_action
-
 
 ## Q-Learning-Agent
 def q_learning_agent(

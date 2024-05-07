@@ -72,7 +72,7 @@ def full_algo(world=str(0), epoch=20, gamma=0.9999):
         while coord_formated:
 
             next_action, Q, N = agent.q_learning_agent(
-                prev_state, prev_action, coord_formated, reward, Q, N, gamma, world
+                prev_state, prev_action, coord_formated, reward, Q, N, gamma, world,
             )
             prev_prev_state = prev_state
             prev_prev_action = prev_action
@@ -123,7 +123,7 @@ if __name__ == "__main__":
     # Run game
     while True:
         try:
-            full_algo(world=4, epoch=20)
+            full_algo(world=3, epoch=100)
         except Exception as e:
             print(e)
             print("it's okay, run it back")
